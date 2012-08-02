@@ -12,7 +12,7 @@ var express = require('express'),
 	io = require('socket.io').listen(3001),
 	pg = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
-	conString = "tcp://postgres:admin@localhost/postgres",
+	conString = "tcp://postgres:m4rkpub@mydevz.in/postgres",
 	app = express();
 
 var conquery = function(query, params, callback){
@@ -28,7 +28,7 @@ var conquery = function(query, params, callback){
 }
 
 app.configure(function(){
-	app.set('port', process.env.PORT || 3000);
+	app.set('port', process.env.PORT || 80);
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
@@ -107,7 +107,7 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.preview = result.rows[0].preview;
 			params.version = result.rows[0].version;
 		}
-
+		console.log(params.preview);
 		routes.preview(req, res, params);
 	});
 });

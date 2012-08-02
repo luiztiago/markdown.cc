@@ -93,6 +93,7 @@ YUI().use('node', 'event', function (Y) {
 					share = Node.one('.icon-share'),
 					fork = Node.one('.icon-fork'),
 					preview = Node.one('.icon-preview');
+				
 				if(nav) {
 					save.on('click', function(e){
 						if(textarea.hasClass('changed')) {
