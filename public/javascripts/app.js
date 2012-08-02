@@ -39,7 +39,8 @@ YUI().use('node', 'event', function (Y) {
 					form = Y.one('#editMd'),
 					preview = Y.one('#previewMd'),
 					viewport = Y.one(document).get('winHeight'),
-					newMiddleHeight = parseInt(viewport, 10) - 125,
+					header = parseInt(Y.one('header').getStyle('height'), 10),
+					newMiddleHeight = parseInt(viewport, 10) - 50 - header,
 					newContentHeight = newMiddleHeight - 30;
 
 				middle.setStyle('height', newMiddleHeight + 'px');

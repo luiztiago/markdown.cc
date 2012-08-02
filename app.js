@@ -60,8 +60,8 @@ app.get('/:code', function(req, res){
 	});
 });
 
-app.get('/:code/v/:version', function(req, res){
-	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params.code, req.params.version], function(err, result) {
+app.get(/^\/([a-z0-9]+)\/([0-9]+)\/?$/, function(req, res){
+	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params[0], req.params[1]], function(err, result) {
 		var params = {};
 		console.log(err);
 		if(result.rows.length) {
@@ -73,8 +73,13 @@ app.get('/:code/v/:version', function(req, res){
 	});
 });
 
-app.get('/:code/v/:version/preview', function(req, res){
-	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params.code, req.params.version], function(err, result) {
+app.get(/^\/([a-z0-9]+)\/([0-9]+)\/?$/, function(req, res){
+	res.send('Teste');
+});
+
+// app.get('/:code/v/:version/preview', function(req, res){
+app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
+	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params[0], req.params[1]], function(err, result) {
 		var params = {};
 		console.log(err);
 		if(result.rows.length) {

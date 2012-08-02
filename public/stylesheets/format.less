@@ -48,10 +48,19 @@ header {
 	height: 75px;
 }
 
+.preview header {
+	height: 45px;
+}
+
 header h1 {
 	font-size: 40px;
 	color: #666;
 	line-height: 55px;
+}
+
+.preview header h1 {
+	font-size: 20px;
+	line-height: 30px;
 }
 
 header nav {
@@ -100,8 +109,12 @@ header nav ul li a:hover {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	height: 600px;
-	background: #fff url(../images/line.png) repeat-y center center;
 	overflow: hidden;
+	background: #fff;
+}
+
+#middle.editable {
+	background: #fff url(../images/line.png) repeat-y center center;
 }
 
 #editMd {
@@ -117,7 +130,7 @@ header nav ul li a:hover {
 	box-shadow: ;
 }
 
-#previewMd {
+#middle.editable #previewMd {
 	width: 50%;
 	margin-left: 50%;
 	height: 200px;
