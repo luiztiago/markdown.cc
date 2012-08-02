@@ -47,14 +47,33 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/:code', function(req, res){
-	conquery("SELECT * FROM registers WHERE code = $1 AND version = (SELECT MAX(version) FROM registers WHERE code = $1)", [req.params.code], function(err, result) {
+app.get(/^\/([a-z0-9]+)\/?$/, function(req, res){
+	//conquery("SELECT * FROM registers WHERE code = $1 AND version = (SELECT MAX(version) FROM registers WHERE code = $1)", [req.params.code], function(err, result) {
+	conquery("SELECT * FROM registers WHERE code = $1 AND version = 1;", [req.params[0]], function(err, result) {
 		var params = {};
 
 		if(result.rows.length) {
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
+			params.version = result.rows[0].version;
 		}
+
+		routes.load(req, res, params);
+	});
+});
+
+app.get(/^\/([a-z0-9]+)\/last\/?$/, function(req, res){
+	conquery("SELECT * FROM registers WHERE code = $1 AND version = (SELECT MAX(version) FROM registers WHERE code = $1)", [req.params[0]], function(err, result) {
+	//conquery("SELECT * FROM registers WHERE code = $1 AND version = 1;", [req.params[0]], function(err, result) {
+		var params = {};
+
+		if(result.rows.length) {
+			params.markdown = result.rows[0].markdown;
+			params.preview = result.rows[0].preview;
+			params.version = result.rows[0].version;
+		}
+
+		console.log(params);
 
 		routes.load(req, res, params);
 	});
@@ -67,6 +86,7 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/?$/, function(req, res){
 		if(result.rows.length) {
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
+			params.version = result.rows[0].version;
 		}
 
 		routes.load(req, res, params);
@@ -85,6 +105,7 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 		if(result.rows.length) {
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
+			params.version = result.rows[0].version;
 		}
 
 		routes.preview(req, res, params);

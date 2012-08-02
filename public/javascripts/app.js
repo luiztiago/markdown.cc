@@ -4,6 +4,7 @@ YUI().use('node', 'event', function (Y) {
 		socket = io.connect('http://localhost:3001/'),
 		textarea = Node.one("#markdown"),
 		code = Node.one("#code"),
+		version = Node.one("#version"),
 		preview = Node.one("#previewMd section");
 
 	socket.on('markpreview', function (data) {
@@ -12,7 +13,7 @@ YUI().use('node', 'event', function (Y) {
 
 	socket.on('saved', function (data) {
 		// console.log(data);
-		location.href = '/'+data.code+'/v/'+data.version;
+		location.href = '/'+data.code+'/'+data.version+'/';
 	});
 
 	socket.on('errormsg', function (data) {
@@ -57,6 +58,7 @@ YUI().use('node', 'event', function (Y) {
 					App.Form.change();
 					textarea.on('valuechange', function(){
 						// App.Form.change();
+						textarea.addClass('changed');
 						clearTimeout(App.Form.interval);
 						App.Form.interval = setTimeout(function(){ App.Form.change(); }, 1000)
 					});
@@ -67,14 +69,18 @@ YUI().use('node', 'event', function (Y) {
 				socket.emit('markinput', params);
 			},
 			getParams: function(){
-				var params;
+				var params = {};
+
 				if(textarea) {
-					var params = {
-						md: textarea.get('value')
-					}
+					params.md = textarea.get('value');
 				}
+
 				if(code) {
 					params.code = code.get('value');
+				}
+
+				if(version) {
+					params.version = version.get('value');
 				}
 
 				return params;
@@ -89,8 +95,10 @@ YUI().use('node', 'event', function (Y) {
 					preview = Node.one('.icon-preview');
 				if(nav) {
 					save.on('click', function(e){
-						var params = App.Form.getParams();
-						socket.emit('save', params);
+						if(textarea.hasClass('changed')) {
+							var params = App.Form.getParams();
+							socket.emit('save', params);
+						}
 						e.preventDefault();
 					});
 
@@ -98,6 +106,12 @@ YUI().use('node', 'event', function (Y) {
 						var params = App.Form.getParams();
 						delete params.code;
 						socket.emit('save', params);
+						e.preventDefault();
+					});
+
+					preview.on('click', function(e){
+						var params = App.Form.getParams();
+						location.href = '/'+params.code+'/'+params.version+'/preview/';
 						e.preventDefault();
 					});
 				}
