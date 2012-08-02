@@ -1,0 +1,3 @@
+exports.md = {
+	a: true
+};

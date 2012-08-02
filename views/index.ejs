@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8" />
+	<title><%= title %></title>
+
+	<link href="/stylesheets/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen" />
+	<link href="/stylesheets/format.css" type="text/css" rel="stylesheet" media="screen" />
+
+</head>
+
+<body>
+
+<div id="container">
+
+	<header>
+		<h1>mdpub.cc</h1>
+
+		<nav>
+			<ul>
+				<li class="icon icon-save"><a href="#">save</a></li>
+				<li class="icon icon-share"><a href="#">share</a></li>
+				<li class="icon icon-fork"><a href="#">fork</a></li>
+				<li class="icon icon-preview"><a href="#">preview</a></li>
+			</ul>	
+		</nav>
+	</header>
+	
+	<div id="middle">
+		<form id="editMd" action="">
+			<% try { %>
+			<input type="hidden" name="code" id="code" value="<%= code %>" />
+			<% } catch(err) { } %>
+			<fieldset>
+				<% try { %>
+					<textarea name="markdown" id="markdown" cols="30" rows="10"><%= markdown %></textarea>	
+				<% } catch(err) { %>
+					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>	
+				<% } %>
+			</fieldset>
+		</form>
+
+		<div id="previewMd">
+			<section>
+				<% try { %>
+					<!--< =preview %> -->
+				<% } catch(err) { %>
+					<h1>&lt;----- Type here</h1>	
+				<% } %>
+			</section>
+		</div>
+	</div><!-- /#middle -->
+	
+</div><!-- /#container -->
+
+<!-- <script src="public/javascripts/jquery-1.7.2.min.js" type="text/javascript" language="javascript"></script>
+<script src="public/javascripts/app.js" type="text/javascript" language="javascript"></script> -->
+
+<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+<script src="http://localhost:3001/socket.io/socket.io.js"></script>
+<script src="/javascripts/app.js"></script>
+
+	
+
+</script>
+
+</body>
+</html>
