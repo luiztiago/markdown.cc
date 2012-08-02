@@ -1,5 +1,12 @@
 # markdownpub.cc
 
+## How to install
+
+* Clone the project :)
+* In project's folder, type `npm install`
+* Create database in postgres
+* Configure database conneciton in /app.js
+
 ## Team
 
 * Djalma Araujo
