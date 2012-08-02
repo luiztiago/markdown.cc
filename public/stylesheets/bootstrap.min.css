@@ -8,6 +8,10 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
+body {
+  font-family: 'Myriad Pro', 'Lucida Grande', 'Lucida Sans', 'Verdana', 'Tahoma', sans-serif;
+}
+
 article,
 aside,
 details,
