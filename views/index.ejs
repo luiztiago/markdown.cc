@@ -19,7 +19,7 @@
 		<nav>
 			<ul>
 				<li class="icon icon-save"><a href="#">save</a></li>
-				<li class="icon icon-share"><a href="#">share</a></li>
+				<!-- <li class="icon icon-share"><a href="#">share</a></li> -->
 				<li class="icon icon-fork"><a href="#">fork</a></li>
 				<li class="icon icon-preview"><a href="#">preview</a></li>
 			</ul>	
@@ -33,7 +33,11 @@
 			<% } catch(err) { } %>
 			<fieldset>
 				<% try { %>
+					<% if (markdown) { %>
 					<textarea name="markdown" id="markdown" cols="30" rows="10"><%= markdown %></textarea>	
+					<% }else{ %>
+					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>	
+					<% } %>
 				<% } catch(err) { %>
 					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>	
 				<% } %>

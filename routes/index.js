@@ -10,3 +10,7 @@ exports.index = function(req, res){
 exports.load = function(req, res, params){
 	res.render('index', { title: 'mdpub.cc', code: req.params.code, markdown: params.markdown, preview: params.preview });
 };
+
+exports.preview = function(req, res, params){
+	res.render('preview', { title: 'mdpub.cc', code: req.params.code, markdown: params.markdown, preview: params.preview });
+};

@@ -1,5 +1,10 @@
 # markdownpub.cc
 
+## Team
+
+* Djalma Araujo
+* Luiz Tiago
+
 ## Greetings
 
 * Sérgio Cavalcante: the great help in database model and queries in psql

@@ -54,8 +54,6 @@ app.get('/:code', function(req, res){
 		if(result.rows.length) {
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
-		}else{
-			params.markdown = params.preview = null;
 		}
 
 		routes.load(req, res, params);
@@ -69,11 +67,22 @@ app.get('/:code/v/:version', function(req, res){
 		if(result.rows.length) {
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
-		}else{
-			params.markdown = params.preview = null;
 		}
 
 		routes.load(req, res, params);
+	});
+});
+
+app.get('/:code/v/:version/preview', function(req, res){
+	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params.code, req.params.version], function(err, result) {
+		var params = {};
+		console.log(err);
+		if(result.rows.length) {
+			params.markdown = result.rows[0].markdown;
+			params.preview = result.rows[0].preview;
+		}
+
+		routes.preview(req, res, params);
 	});
 });
 
@@ -98,7 +107,10 @@ io.sockets.on('connection', function (socket) {
 			conquery("SELECT MAX(version)+1 as version FROM registers WHERE code = $1;", [data.code], function(err, result){
 				console.log(err);
 				console.log(result);
-				var version = result.rows[0].version;
+				var version = (result.rows[0].version != null) ? result.rows[0].version : 1;
+				console.log('----');
+				console.log(version);
+				console.log('----');
 				conquery("INSERT INTO registers (code, version, markdown, preview, created_at) VALUES ($1, $2, $3, $4, current_timestamp);", [data.code, version, data.md, preview], function(err, result){
 					console.log(result);
 					socket.emit('saved', {code: data.code, version: version});

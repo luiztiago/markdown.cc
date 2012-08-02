@@ -6,16 +6,6 @@ YUI().use('node', 'event', function (Y) {
 		code = Node.one("#code"),
 		preview = Node.one("#previewMd section");
 
-	// Event
-	// textarea.on('valuechange', function(e) {
-	// 	var params = {
-	// 		md: textarea.get('value'),
-	// 		code: code.get('value')
-	// 	}
-	// 	socket.emit('markinput', params);
-	// });
-
-	// Preview
 	socket.on('markpreview', function (data) {
 		preview.setHTML(data.html);
 	});
@@ -53,27 +43,34 @@ YUI().use('node', 'event', function (Y) {
 					newContentHeight = newMiddleHeight - 30;
 
 				middle.setStyle('height', newMiddleHeight + 'px');
-				textarea.setStyle('height', newContentHeight + 'px');
+				if(textarea){
+					textarea.setStyle('height', newContentHeight + 'px');
+				}
 				preview.setStyle('height', newContentHeight + 'px');
 			}
 		},
 		Form: {
 			interval: null,
 			setup: function(){
-				App.Form.change();
-				textarea.on('valuechange', function(){
-					// App.Form.change();
-					clearTimeout(App.Form.interval);
-					App.Form.interval = setTimeout(function(){ App.Form.change(); }, 1000)
-				});
+				if(textarea) {
+					App.Form.change();
+					textarea.on('valuechange', function(){
+						// App.Form.change();
+						clearTimeout(App.Form.interval);
+						App.Form.interval = setTimeout(function(){ App.Form.change(); }, 1000)
+					});
+				}
 			},
 			change: function(){
 				var params = App.Form.getParams();
 				socket.emit('markinput', params);
 			},
 			getParams: function(){
-				var params = {
-					md: textarea.get('value')
+				var params;
+				if(textarea) {
+					var params = {
+						md: textarea.get('value')
+					}
 				}
 				if(code) {
 					params.code = code.get('value');
@@ -84,16 +81,25 @@ YUI().use('node', 'event', function (Y) {
 		},
 		Nav: {
 			setup: function(){
-				var save = Node.one('.icon-save'),
-					share = Node.one('icon-share'),
-					fork = Node.one('icon-fork'),
-					preview = Node.one('icon-preview');
+				var nav = Node.one('nav'),
+					save = Node.one('.icon-save'),
+					share = Node.one('.icon-share'),
+					fork = Node.one('.icon-fork'),
+					preview = Node.one('.icon-preview');
+				if(nav) {
+					save.on('click', function(e){
+						var params = App.Form.getParams();
+						socket.emit('save', params);
+						e.preventDefault();
+					});
 
-				save.on('click', function(e){
-					var params = App.Form.getParams();
-					socket.emit('save', params);
-					e.preventDefault();
-				});
+					fork.on('click', function(e){
+						var params = App.Form.getParams();
+						delete params.code;
+						socket.emit('save', params);
+						e.preventDefault();
+					});
+				}
 			}
 		}
 	};
