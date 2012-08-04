@@ -112,6 +112,13 @@ YUI().use('node', 'event', function (Y) {
 
 					preview.on('click', function(e){
 						var params = App.Form.getParams();
+						if(!params.code) {
+							if(textarea.hasClass('changed')) {
+								socket.emit('save', params);
+							}else{
+								return false;
+							}
+						}
 						location.href = '/'+params.code+'/'+params.version+'/preview/';
 						e.preventDefault();
 					});
