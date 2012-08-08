@@ -2,25 +2,10 @@ YUI().use('node', 'event', function (Y) {
 
 	var Node = Y.Node,
 		socket = io.connect('http://localhost:3001/'),
-		textarea = Node.one("#markdown"),
-		code = Node.one("#code"),
+		TEXTAREA = Node.one("#markdown"),
+		CODE = Node.one("#code"),
 		version = Node.one("#version"),
 		preview = Node.one("#previewMd section");
-
-	socket.on('markpreview', function (data) {
-		preview.setHTML(data.html);
-	});
-
-	socket.on('saved', function (data) {
-		// console.log(data);
-		location.href = '/'+data.code+'/'+data.version+'/';
-	});
-
-	socket.on('errormsg', function (data) {
-		// console.log(data);
-		console.log(data);
-		alert(data.msg)
-	});
 
 	var App = {
 		init: function(){
@@ -28,64 +13,64 @@ YUI().use('node', 'event', function (Y) {
 			App.Form.setup();
 			App.Nav.setup();
 		},
+
 		Resize: {
 			setup: function(){
-				Y.on('windowresize', function(){
-					App.Resize.onEvent();
-				})
 				App.Resize.onEvent();
+				Y.on('windowresize', function () {
+					App.Resize.onEvent();
+				});
 			},
+
 			onEvent: function(){
-				var middle = Y.one('#middle'),
-					form = Y.one('#editMd'),
-					preview = Y.one('#previewMd'),
-					viewport = Y.one(document).get('winHeight'),
-					header = parseInt(Y.one('header').getStyle('height'), 10),
+				var middle = Node.one('#middle'),
+					form = Node.one('#editMd'),
+					preview = Node.one('#previewMd'),
+					viewport = Node.one(document).get('winHeight'),
+					header = parseInt(Node.one('header').getStyle('height'), 10),
 					newMiddleHeight = parseInt(viewport, 10) - 50 - header,
 					newContentHeight = newMiddleHeight - 30;
 
 				middle.setStyle('height', newMiddleHeight + 'px');
-				if(textarea){
-					textarea.setStyle('height', newContentHeight + 'px');
+
+				if (TEXTAREA) {
+					TEXTAREA.setStyle('height', newContentHeight + 'px');
 				}
+
 				preview.setStyle('height', newContentHeight + 'px');
 			}
 		},
+
 		Form: {
-			interval: null,
 			setup: function(){
-				if(textarea) {
+				if (TEXTAREA) {
 					App.Form.change();
-					textarea.on('valuechange', function(){
-						// App.Form.change();
-						textarea.addClass('changed');
-						clearTimeout(App.Form.interval);
-						App.Form.interval = setTimeout(function(){ App.Form.change(); }, 1000)
+					TEXTAREA.on('valuechange', function(){
+						App.Form.change();
 					});
 				}
 			},
+
 			change: function(){
-				var params = App.Form.getParams();
-				socket.emit('markinput', params);
+				var params = App.Form.getParams(),
+				converter = new Showdown.converter();
+
+				preview.setHTML(converter.makeHtml(params.md));
 			},
+
 			getParams: function(){
 				var params = {};
 
-				if(textarea) {
-					params.md = textarea.get('value');
-				}
+				if (TEXTAREA) params.md = TEXTAREA.get('value');
 
-				if(code) {
-					params.code = code.get('value');
-				}
+				if (CODE) params.code = CODE.get('value');
 
-				if(version) {
-					params.version = version.get('value');
-				}
+				if (version) params.version = version.get('value');
 
 				return params;
 			}
 		},
+
 		Nav: {
 			setup: function(){
 				var nav = Node.one('nav'),
@@ -93,7 +78,7 @@ YUI().use('node', 'event', function (Y) {
 					share = Node.one('.icon-share'),
 					fork = Node.one('.icon-fork'),
 					preview = Node.one('.icon-preview');
-				
+
 				if(nav) {
 					save.on('click', function(e){
 						if(textarea.hasClass('changed')) {
@@ -125,7 +110,18 @@ YUI().use('node', 'event', function (Y) {
 				}
 			}
 		}
+
 	};
+
+	// Socket.io Events
+	socket.on('saved', function (data) {
+		location.href = '/'+data.code+'/'+data.version+'/';
+	});
+
+	socket.on('errormsg', function (data) {
+		console.log(data);
+		alert(data.msg)
+	});
 
 	App.init();
 

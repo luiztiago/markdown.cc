@@ -22,10 +22,10 @@
 				<!-- <li class="icon icon-share"><a href="#">share</a></li> -->
 				<li class="icon icon-fork"><a href="#">fork</a></li>
 				<li class="icon icon-preview"><a href="#">preview</a></li>
-			</ul>	
+			</ul>
 		</nav>
 	</header>
-	
+
 	<div id="middle" class="editable">
 		<form id="editMd" action="">
 			<% try { %>
@@ -35,12 +35,12 @@
 			<fieldset>
 				<% try { %>
 					<% if (markdown) { %>
-					<textarea name="markdown" id="markdown" cols="30" rows="10"><%= markdown %></textarea>	
+					<textarea name="markdown" id="markdown" cols="30" rows="10"><%= markdown %></textarea>
 					<% }else{ %>
-					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>	
+					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>
 					<% } %>
 				<% } catch(err) { %>
-					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>	
+					<textarea name="markdown" id="markdown" cols="30" rows="10"></textarea>
 				<% } %>
 			</fieldset>
 		</form>
@@ -50,20 +50,20 @@
 				<% try { %>
 					<!--< =preview %> -->
 				<% } catch(err) { %>
-					<h1>&lt;----- Type here</h1>	
+					<h1>&lt;----- Type here</h1>
 				<% } %>
 			</section>
 		</div>
 	</div><!-- /#middle -->
-	
+
 </div><!-- /#container -->
 
 <!-- <script src="public/javascripts/jquery-1.7.2.min.js" type="text/javascript" language="javascript"></script>
 <script src="public/javascripts/app.js" type="text/javascript" language="javascript"></script> -->
 
-<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
-<script src="http://localhost:3001/socket.io/socket.io.js"></script>
-<script src="/javascripts/app.js"></script>
-
+	<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+	<script src="http://localhost:3001/socket.io/socket.io.js"></script>
+	<script src="/javascripts/showdown.js"></script>
+		<script src="/javascripts/app.js"></script>
 </body>
 </html>
