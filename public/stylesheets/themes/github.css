@@ -1,0 +1,71 @@
+#previewMd section {
+color:#444;
+font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+font-size:12px;
+line-height:1.5em;
+}
+
+#previewMd section a{ color: #0645ad; text-decoration:none;}
+#previewMd section a:visited{ color: #0b0080; }
+#previewMd section a:hover{ color: #06e; }
+#previewMd section a:active{ color:#faa700; }
+#previewMd section a:focus{ outline: thin dotted; }
+#previewMd section a:hover, #previewMd section a:active{ outline: 0; }
+
+#previewMd section ::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+#previewMd section ::selection{background:rgba(255,255,0,0.3);color:#000}
+
+#previewMd section a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+#previewMd section a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+#previewMd section p{
+margin:1em 0;
+}
+
+#previewMd section img{
+max-width:100%;
+}
+
+#previewMd section h1,#previewMd section h2,#previewMd section h3,#previewMd section h4,#previewMd section h5,#previewMd section h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+#previewMd section h4,#previewMd section h5,#previewMd section h6{ font-weight: bold; }
+#previewMd section h1{ font-size:2.5em; }
+#previewMd section h2{ font-size:2em; }
+#previewMd section h3{ font-size:1.5em; }
+#previewMd section h4{ font-size:1.2em; }
+#previewMd section h5{ font-size:1em; }
+#previewMd section h6{ font-size:0.9em; }
+
+#previewMd section blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+#previewMd section hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+#previewMd section pre, #previewMd section code, #previewMd section kbd, #previewMd section samp { color: #000; font-family: monospace, monospace; _font-family: 'courier new', monospace; font-size: 0.98em; }
+#previewMd section pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+
+#previewMd section b, #previewMd section strong { font-weight: bold; }
+
+#previewMd section dfn { font-style: italic; }
+
+#previewMd section ins { background: #ff9; color: #000; text-decoration: none; }
+
+#previewMd section mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+#previewMd section sub, #previewMd section sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+#previewMd section sup { top: -0.5em; }
+#previewMd section sub { bottom: -0.25em; }
+
+#previewMd section ul, #previewMd section ol { margin: 1em 0; padding: 0 0 0 2em; }
+#previewMd section li p:last-child { margin:0 }
+#previewMd section dd { margin: 0 0 0 2em; }
+
+#previewMd section img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+#previewMd section table { border-collapse: collapse; border-spacing: 0; }
+#previewMd section td { vertical-align: top; }
