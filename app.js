@@ -117,11 +117,6 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 io.sockets.on('connection', function (socket) {
-	socket.on('markinput', function (data) {
-		var html = markdownParser(data.md);
-		socket.emit('markpreview', {html: html});
-	});
-
 	socket.on('save', function (data) {
 		console.log(data);
 		var preview = markdownParser(data.md);
