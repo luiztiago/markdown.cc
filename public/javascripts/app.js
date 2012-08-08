@@ -1,17 +1,24 @@
 YUI().use('node', 'event', function (Y) {
 
 	var Node = Y.Node,
-		socket = io.connect('http://localhost:3001/'),
-		TEXTAREA = Node.one("#markdown"),
-		CODE = Node.one("#code"),
-		version = Node.one("#version"),
-		preview = Node.one("#previewMd section");
+	SOCKET = io.connect('http://localhost:3001/'),
+	TEXTAREA = Node.one("#markdown"),
+	CODE = Node.one("#code"),
+	VERSION = Node.one("#version"),
+	PREVIEW_CONTAINER = Node.one("#previewMd"),
+	PREVIEW = PREVIEW_CONTAINER.one("section"),
+	NAV = Node.one('nav'),
+	NAV_SAVE_BUTTON = Node.one('.icon-save'),
+	NAV_SHARE_BUTTON = Node.one('.icon-share'),
+	NAV_FORK_BUTTON = Node.one('.icon-fork'),
+	NAV_PREVIEW_BUTTON = Node.one('.icon-preview');
 
 	var App = {
 		init: function(){
 			App.Resize.setup();
 			App.Form.setup();
 			App.Nav.setup();
+			App.SocketListeners();
 		},
 
 		Resize: {
@@ -23,21 +30,18 @@ YUI().use('node', 'event', function (Y) {
 			},
 
 			onEvent: function(){
-				var middle = Node.one('#middle'),
-					form = Node.one('#editMd'),
-					preview = Node.one('#previewMd'),
-					viewport = Node.one(document).get('winHeight'),
+				var viewport = Node.one(document).get('winHeight'),
 					header = parseInt(Node.one('header').getStyle('height'), 10),
 					newMiddleHeight = parseInt(viewport, 10) - 50 - header,
 					newContentHeight = newMiddleHeight - 30;
 
-				middle.setStyle('height', newMiddleHeight + 'px');
+				Node.one("#middle").setStyle('height', newMiddleHeight + 'px');
 
 				if (TEXTAREA) {
 					TEXTAREA.setStyle('height', newContentHeight + 'px');
 				}
 
-				preview.setStyle('height', newContentHeight + 'px');
+				PREVIEW_CONTAINER.setStyle('height', newContentHeight + 'px');
 			}
 		},
 
@@ -55,17 +59,15 @@ YUI().use('node', 'event', function (Y) {
 				var params = App.Form.getParams(),
 				converter = new Showdown.converter();
 
-				preview.setHTML(converter.makeHtml(params.md));
+				PREVIEW.setHTML(converter.makeHtml(params.md));
 			},
 
 			getParams: function(){
 				var params = {};
 
-				if (TEXTAREA) params.md = TEXTAREA.get('value');
-
-				if (CODE) params.code = CODE.get('value');
-
-				if (version) params.version = version.get('value');
+				params.md = (TEXTAREA) ? TEXTAREA.get('value') : null;
+				params.code = (CODE) ? CODE.get('value') : null;
+				params.version = (VERSION) ? VERSION.get('value') : null;
 
 				return params;
 			}
@@ -73,55 +75,52 @@ YUI().use('node', 'event', function (Y) {
 
 		Nav: {
 			setup: function(){
-				var nav = Node.one('nav'),
-					save = Node.one('.icon-save'),
-					share = Node.one('.icon-share'),
-					fork = Node.one('.icon-fork'),
-					preview = Node.one('.icon-preview');
-
-				if(nav) {
-					save.on('click', function(e){
+				if (NAV) {
+					NAV_SAVE_BUTTON.on('click', function(e){
 						if(textarea.hasClass('changed')) {
 							var params = App.Form.getParams();
-							socket.emit('save', params);
+							SOCKET.emit('save', params);
 						}
 						e.preventDefault();
 					});
 
-					fork.on('click', function(e){
+					NAV_FORK_BUTTON.on('click', function(e){
 						var params = App.Form.getParams();
 						delete params.code;
-						socket.emit('save', params);
+						SOCKET.emit('save', params);
 						e.preventDefault();
 					});
 
-					preview.on('click', function(e){
+					NAV_PREVIEW_BUTTON.on('click', function(e){
 						var params = App.Form.getParams();
-						if(!params.code) {
-							if(textarea.hasClass('changed')) {
-								socket.emit('save', params);
-							}else{
+
+						if (!params.code) {
+							if (textarea.hasClass('changed')) {
+								SOCKET.emit('save', params);
+							} else {
 								return false;
 							}
 						}
-						location.href = '/'+params.code+'/'+params.version+'/preview/';
+
+						location.href = '/' + params.code + '/' + params.version + '/preview/';
 						e.preventDefault();
 					});
 				}
 			}
+		},
+
+		SocketListeners: function() {
+			SOCKET.on('saved', function (data) {
+				location.href = '/' + data.code + '/' + data.version + '/';
+			});
+
+			SOCKET.on('errormsg', function (data) {
+				console.log(data);
+				alert(data.msg)
+			});
+
 		}
-
 	};
-
-	// Socket.io Events
-	socket.on('saved', function (data) {
-		location.href = '/'+data.code+'/'+data.version+'/';
-	});
-
-	socket.on('errormsg', function (data) {
-		console.log(data);
-		alert(data.msg)
-	});
 
 	App.init();
 
