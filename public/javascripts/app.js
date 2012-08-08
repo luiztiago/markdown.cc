@@ -4,8 +4,8 @@ YUI().use('node', 'event', function (Y) {
 		socket = io.connect('http://localhost:3001/'),
 		TEXTAREA = Node.one("#markdown"),
 		CODE = Node.one("#code"),
-		version = Node.one("#version"),
-		preview = Node.one("#previewMd section");
+		VERSION = Node.one("#version"),
+		PREVIEW = Node.one("#previewMd section");
 
 	var App = {
 		init: function(){
@@ -23,21 +23,21 @@ YUI().use('node', 'event', function (Y) {
 			},
 
 			onEvent: function(){
-				var middle = Node.one('#middle'),
-					form = Node.one('#editMd'),
-					preview = Node.one('#previewMd'),
+				var MIDDLE = Node.one('#middle'),
+					FORM = Node.one('#editMd'),
+					PREVIEW = Node.one('#previewMd'),
 					viewport = Node.one(document).get('winHeight'),
 					header = parseInt(Node.one('header').getStyle('height'), 10),
 					newMiddleHeight = parseInt(viewport, 10) - 50 - header,
 					newContentHeight = newMiddleHeight - 30;
 
-				middle.setStyle('height', newMiddleHeight + 'px');
+				MIDDLE.setStyle('height', newMiddleHeight + 'px');
 
 				if (TEXTAREA) {
 					TEXTAREA.setStyle('height', newContentHeight + 'px');
 				}
 
-				preview.setStyle('height', newContentHeight + 'px');
+				PREVIEW.setStyle('height', newContentHeight + 'px');
 			}
 		},
 
@@ -55,7 +55,7 @@ YUI().use('node', 'event', function (Y) {
 				var params = App.Form.getParams(),
 				converter = new Showdown.converter();
 
-				preview.setHTML(converter.makeHtml(params.md));
+				PREVIEW.setHTML(converter.makeHtml(params.md));
 			},
 
 			getParams: function(){
@@ -65,7 +65,7 @@ YUI().use('node', 'event', function (Y) {
 
 				if (CODE) params.code = CODE.get('value');
 
-				if (version) params.version = version.get('value');
+				if (VERSION) params.version = VERSION.get('value');
 
 				return params;
 			}
@@ -73,32 +73,31 @@ YUI().use('node', 'event', function (Y) {
 
 		Nav: {
 			setup: function(){
-				var nav = Node.one('nav'),
-					save = Node.one('.icon-save'),
-					share = Node.one('.icon-share'),
-					fork = Node.one('.icon-fork'),
-					preview = Node.one('.icon-preview');
+				var NAV = Node.one('nav'),
+					SAVE = Node.one('.icon-save'),
+					FORK = Node.one('.icon-fork'),
+					PREVIEW = Node.one('.icon-preview');
 
-				if(nav) {
-					save.on('click', function(e){
-						if(textarea.hasClass('changed')) {
+				if(NAV) {
+					SAVE.on('click', function(e){
+						if(TEXTAREA.hasClass('changed')) {
 							var params = App.Form.getParams();
 							socket.emit('save', params);
 						}
 						e.preventDefault();
 					});
 
-					fork.on('click', function(e){
+					FORK.on('click', function(e){
 						var params = App.Form.getParams();
 						delete params.code;
 						socket.emit('save', params);
 						e.preventDefault();
 					});
 
-					preview.on('click', function(e){
+					PREVIEW.on('click', function(e){
 						var params = App.Form.getParams();
 						if(!params.code) {
-							if(textarea.hasClass('changed')) {
+							if(TEXTAREA.hasClass('changed')) {
 								socket.emit('save', params);
 							}else{
 								return false;
