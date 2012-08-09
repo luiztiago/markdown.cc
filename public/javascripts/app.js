@@ -77,7 +77,7 @@ YUI().use('node', 'event', function (Y) {
 			setup: function(){
 				if (NAV) {
 					NAV_SAVE_BUTTON.on('click', function(e){
-						if(textarea.hasClass('changed')) {
+						if(TEXTAREA.hasClass('changed')) {
 							var params = App.Form.getParams();
 							SOCKET.emit('save', params);
 						}
@@ -95,7 +95,7 @@ YUI().use('node', 'event', function (Y) {
 						var params = App.Form.getParams();
 
 						if (!params.code) {
-							if (textarea.hasClass('changed')) {
+							if (TEXTAREA.hasClass('changed')) {
 								SOCKET.emit('save', params);
 							} else {
 								return false;
