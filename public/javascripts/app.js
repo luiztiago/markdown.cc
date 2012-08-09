@@ -59,6 +59,7 @@ YUI().use('node', 'event', function (Y) {
 				var params = App.Form.getParams(),
 				converter = new Showdown.converter();
 
+				TEXTAREA.addClass('changed');
 				PREVIEW.setHTML(converter.makeHtml(params.md));
 			},
 
