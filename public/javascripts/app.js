@@ -1,7 +1,7 @@
 YUI().use('node', 'event', function (Y) {
 
 	var Node = Y.Node,
-	SOCKET = io.connect('http://localhost:3001/'),
+	SOCKET = io.connect('http://markdown.cc:3001/'),
 	TEXTAREA = Node.one("#markdown"),
 	CODE = Node.one("#code"),
 	VERSION = Node.one("#version"),
