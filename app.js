@@ -5,15 +5,17 @@
 
 var express = require('express'),
 	routes = require('./routes'),
-	// con = require('./con'),
 	models = require('./models.js'),
 	http = require('http'),
 	path = require('path'),
+	httpProxy = require('http-proxy'),
 	io = require('socket.io').listen(3001),
 	pg = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
 	conString = "tcp://postgres:m4rkpub@mydevz.in/postgres",
 	app = express();
+
+httpProxy.createServer(3000, 'markdown.cc').listen(80);
 
 var conquery = function(query, params, callback){
 	pg.connect(conString, function(err, client) {
