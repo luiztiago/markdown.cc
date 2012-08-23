@@ -1,17 +1,17 @@
 YUI().use('node', 'event', function (Y) {
 
 	var Node = Y.Node,
-	SOCKET = io.connect('http://markdown.cc:3001/'),
-	TEXTAREA = Node.one("#markdown"),
-	CODE = Node.one("#code"),
-	VERSION = Node.one("#version"),
-	PREVIEW_CONTAINER = Node.one("#previewMd"),
-	PREVIEW = PREVIEW_CONTAINER.one("section"),
-	NAV = Node.one('nav'),
-	NAV_SAVE_BUTTON = Node.one('.icon-save'),
-	NAV_SHARE_BUTTON = Node.one('.icon-share'),
-	NAV_FORK_BUTTON = Node.one('.icon-fork'),
-	NAV_PREVIEW_BUTTON = Node.one('.icon-preview');
+		SOCKET = io.connect('http://markdown.cc:3001/'),
+		TEXTAREA = Node.one("#markdown"),
+		CODE = Node.one("#code"),
+		VERSION = Node.one("#version"),
+		PREVIEW_CONTAINER = Node.one("#previewMd"),
+		PREVIEW = PREVIEW_CONTAINER.one("section"),
+		NAV = Node.one('nav'),
+		NAV_SAVE_BUTTON = Node.one('.icon-save'),
+		NAV_SHARE_BUTTON = Node.one('.icon-share'),
+		NAV_FORK_BUTTON = Node.one('.icon-fork'),
+		NAV_PREVIEW_BUTTON = Node.one('.icon-preview'),
 
 	var App = {
 		init: function(){
@@ -97,13 +97,15 @@ YUI().use('node', 'event', function (Y) {
 
 						if (!params.code) {
 							if (TEXTAREA.hasClass('changed')) {
+								App.lastNav = 'preview';
 								SOCKET.emit('save', params);
 							} else {
 								return false;
 							}
+						}else{
+							location.href = '/' + params.code + '/' + params.version + '/preview/';
 						}
 
-						location.href = '/' + params.code + '/' + params.version + '/preview/';
 						e.preventDefault();
 					});
 				}
@@ -112,7 +114,13 @@ YUI().use('node', 'event', function (Y) {
 
 		SocketListeners: function() {
 			SOCKET.on('saved', function (data) {
-				location.href = '/' + data.code + '/' + data.version + '/';
+				var url = '/' + data.code + '/' + data.version + '/';
+
+				if(App.lastNav == 'preview') {
+					url += 'preview/'
+				}
+
+				location.href = url;
 			});
 
 			SOCKET.on('errormsg', function (data) {
@@ -120,7 +128,9 @@ YUI().use('node', 'event', function (Y) {
 				alert(data.msg)
 			});
 
-		}
+		},
+
+		lastNav: null
 	};
 
 	App.init();
