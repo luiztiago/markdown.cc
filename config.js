@@ -1,6 +1,6 @@
 exports.config = {
 	user: 'postgres',
-	password: 'm4rkpub',
+	password: 'password',
 	host: 'mydevz.in',
 	database: 'postgres'
 };
