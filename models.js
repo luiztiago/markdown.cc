@@ -1,3 +1,0 @@
-exports.md = {
-	a: true
-};

@@ -5,17 +5,17 @@
 
 var express = require('express'),
 	routes = require('./routes'),
-	models = require('./models.js'),
+	c = require('./config.js').config,
 	http = require('http'),
 	path = require('path'),
-	httpProxy = require('http-proxy'),
+	// httpProxy = require('http-proxy'),
 	io = require('socket.io').listen(3001),
 	pg = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
-	conString = "tcp://postgres:m4rkpub@mydevz.in/postgres",
+	conString = "tcp://"+c.user+":"+c.password+"@"+c.host+"/"+c.database+"",
 	app = express();
 
-httpProxy.createServer(3000, 'markdown.cc').listen(80);
+// httpProxy.createServer(3000, 'markdown.cc').listen(80);
 
 var conquery = function(query, params, callback){
 	pg.connect(conString, function(err, client) {
@@ -109,8 +109,8 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.preview = result.rows[0].preview;
 			params.version = result.rows[0].version;
 		}
-		params.markdown.replace('<','&lt;');
-		params.markdown.replace('>','&gt;');
+		params.markdown = params.markdown.replace('<','&lt;');
+		params.markdown = params.markdown.replace('>','&gt;');
 		console.log(params.preview);
 		routes.preview(req, res, params);
 	});
@@ -118,6 +118,7 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
+	console.log(conString);
 });
 
 io.sockets.on('connection', function (socket) {
