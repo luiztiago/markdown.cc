@@ -50,7 +50,6 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get(/^\/([a-z0-9]+)\/?$/, function(req, res){
-	//conquery("SELECT * FROM registers WHERE code = $1 AND version = (SELECT MAX(version) FROM registers WHERE code = $1)", [req.params.code], function(err, result) {
 	conquery("SELECT * FROM registers WHERE code = $1 AND version = 1;", [req.params[0]], function(err, result) {
 		var params = {};
 
@@ -99,7 +98,6 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/?$/, function(req, res){
 	res.send('Teste');
 });
 
-// app.get('/:code/v/:version/preview', function(req, res){
 app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 	conquery("SELECT * FROM registers WHERE code = $1 AND version = $2", [req.params[0], req.params[1]], function(err, result) {
 		var params = {};
@@ -108,9 +106,11 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.markdown = result.rows[0].markdown;
 			params.preview = result.rows[0].preview;
 			params.version = result.rows[0].version;
+
+			var preview = params.preview;
+			params.preview = preview.replace('<','&lt;'); // anti-injection
 		}
-		markdown = params.markdown;
-		params.markdown = markdown.replace('<','&lt;');
+
 		console.log(params.preview);
 		routes.preview(req, res, params);
 	});
@@ -124,8 +124,8 @@ http.createServer(app).listen(app.get('port'), function(){
 io.sockets.on('connection', function (socket) {
 	socket.on('save', function (data) {
 		// console.log(data);
-		markdown = data.md;
-		data.md = markdown.replace('<','&lt;');
+		// markdown = data.md;
+		// data.md = markdown.replace('<','&lt;');
 		// console.log(data);
 		var preview = markdownParser(data.md);
 		if(data.code) {
