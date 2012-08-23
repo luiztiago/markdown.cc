@@ -11,7 +11,7 @@ YUI().use('node', 'event', function (Y) {
 		NAV_SAVE_BUTTON = Node.one('.icon-save'),
 		NAV_SHARE_BUTTON = Node.one('.icon-share'),
 		NAV_FORK_BUTTON = Node.one('.icon-fork'),
-		NAV_PREVIEW_BUTTON = Node.one('.icon-preview'),
+		NAV_PREVIEW_BUTTON = Node.one('.icon-preview');
 
 	var App = {
 		init: function(){
