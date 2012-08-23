@@ -109,6 +109,8 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.preview = result.rows[0].preview;
 			params.version = result.rows[0].version;
 		}
+		params.markdown.replace('<','&lt;');
+		params.markdown.replace('>','&gt;');
 		console.log(params.preview);
 		routes.preview(req, res, params);
 	});
