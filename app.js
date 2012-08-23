@@ -8,14 +8,14 @@ var express = require('express'),
 	c = require('./config.js').config,
 	http = require('http'),
 	path = require('path'),
-	httpProxy = require('http-proxy'),
+	// httpProxy = require('http-proxy'),
 	io = require('socket.io').listen(3001),
 	pg = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
 	conString = "tcp://"+c.user+":"+c.password+"@"+c.host+"/"+c.database+"",
 	app = express();
 
-httpProxy.createServer(3000, 'markdown.cc').listen(80);
+// httpProxy.createServer(3000, 'markdown.cc').listen(80);
 
 var conquery = function(query, params, callback){
 	pg.connect(conString, function(err, client) {
@@ -109,8 +109,8 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.preview = result.rows[0].preview;
 			params.version = result.rows[0].version;
 		}
-		params.markdown = params.markdown.replace('<','&lt;');
-		params.markdown = params.markdown.replace('>','&gt;');
+		markdown = params.markdown;
+		params.markdown = markdown.replace('<','&lt;');
 		console.log(params.preview);
 		routes.preview(req, res, params);
 	});
@@ -118,12 +118,15 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
-	console.log(conString);
+	// console.log(conString);
 });
 
 io.sockets.on('connection', function (socket) {
 	socket.on('save', function (data) {
-		console.log(data);
+		// console.log(data);
+		markdown = data.md;
+		data.md = markdown.replace('<','&lt;');
+		// console.log(data);
 		var preview = markdownParser(data.md);
 		if(data.code) {
 			// try {
