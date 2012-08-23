@@ -8,14 +8,14 @@ var express = require('express'),
 	c = require('./config.js').config,
 	http = require('http'),
 	path = require('path'),
-	// httpProxy = require('http-proxy'),
+	httpProxy = require('http-proxy'),
 	io = require('socket.io').listen(3001),
 	pg = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
 	conString = "tcp://"+c.user+":"+c.password+"@"+c.host+"/"+c.database+"",
 	app = express();
 
-// httpProxy.createServer(3000, 'markdown.cc').listen(80);
+httpProxy.createServer(3000, 'markdown.cc').listen(80);
 
 var conquery = function(query, params, callback){
 	pg.connect(conString, function(err, client) {
