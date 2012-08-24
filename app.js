@@ -108,7 +108,7 @@ app.get(/^\/([a-z0-9]+)\/([0-9]+)\/preview\/?$/, function(req, res){
 			params.version = result.rows[0].version;
 
 			var preview = params.preview;
-			params.preview = preview.replace('<','&lt;'); // anti-injection
+			params.preview = preview.replace(/<+/g,'&lt;'); // anti-injection
 		}
 
 		console.log(params.preview);
@@ -125,7 +125,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('save', function (data) {
 		// console.log(data);
 		// markdown = data.md;
-		// data.md = markdown.replace('<','&lt;');
+		// data.md = markdown.replace(/<+/g,'&lt;'); // anti-injection
 		// console.log(data);
 		var preview = markdownParser(data.md);
 		if(data.code) {
