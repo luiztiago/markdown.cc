@@ -14,5 +14,6 @@ exports.load = function(req, res, params){
 
 exports.preview = function(req, res, params){
 	var version = (params.version) ? params.version : 1;
-	res.render('preview', { title: 'Markdown.cc', code: req.params[0], version: params.version, markdown: params.markdown, preview: params.preview });
+	var preview = params.preview.replace(/&lt;+/g,'<');
+	res.render('preview', { title: 'Markdown.cc', code: req.params[0], version: params.version, markdown: params.markdown, preview: preview });
 };
