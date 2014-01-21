@@ -3,17 +3,18 @@
  * Module dependencies.
  */
 
-var express = require('express'),
-	routes = require('./routes'),
-	c = require('./config.js').config,
-	http = require('http'),
-	path = require('path'),
-	httpProxy = require('http-proxy'),
-	io = require('socket.io').listen(3001),
-	pg = require('pg'),
+var express 		 = require('express'),
+	logfmt         = require("logfmt"),
+	routes         = require('./routes'),
+	c              = require('./config.js').config,
+	http           = require('http'),
+	path           = require('path'),
+	httpProxy      = require('http-proxy'),
+	io             = require('socket.io').listen(3001),
+	pg             = require('pg'),
 	markdownParser = require('node-markdown').Markdown,
-	conString = "tcp://"+c.user+":"+c.password+"@"+c.host+"/"+c.database+"",
-	app = express();
+	conString      = "tcp://"+c.user+":"+c.password+"@"+c.host+"/"+c.database+"",
+	app            = express();
 
 httpProxy.createServer(3000, 'markdown.cc').listen(80);
 
@@ -42,6 +43,7 @@ app.configure(function(){
 	app.use(app.router);
 	app.use(require('stylus').middleware(__dirname + '/public'));
 	app.use(express.static(path.join(__dirname, 'public')));
+	app.use(logfmt.requestLogger());
 });
 
 app.configure('development', function(){
@@ -140,7 +142,7 @@ io.sockets.on('connection', function (socket) {
 			// }catch(err){
 			// 	socket.emit('errormsg', {msg: 'Erro ao fazer a atualização desta marcação'});
 			// }
-			
+
 		}else{
 			conquery("SELECT substr(md5(random()::text),1,5) as code;", function(err, result){
 				var code = result.rows[0].code;

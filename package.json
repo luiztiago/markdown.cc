@@ -11,7 +11,8 @@
     "stylus": "*",
     "socket.io": "*",
     "pg": "*",
-    "node-markdown": "*"
+    "node-markdown": "*",
+    "logfmt": "~0.18.1"
   },
   "subdomain": "luiztiago.mdpubcc",
   "engines": {
